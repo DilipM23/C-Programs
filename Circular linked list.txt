@@ -35,7 +35,7 @@ NODE insert_front(NODE last,int elem)
         last->link=temp;
         return last;
     }
-    temp->link=last;
+    temp->link=last->link;
     last->link=temp;
     return last;
 }
