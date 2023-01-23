@@ -11,6 +11,7 @@ struct node
 
 typedef struct node * NODE;
 
+//Function to allocate memory
 NODE getnode()
 {
     NODE x;
@@ -23,6 +24,7 @@ NODE getnode()
     return x;
 }
 
+//Function to insert elements at the front of the CLL
 NODE insert_front(NODE last,int elem)
 {
     NODE temp;
@@ -40,6 +42,7 @@ NODE insert_front(NODE last,int elem)
     return last;
 }
 
+//Function to delete the elements at the front of the CLL
 NODE delete_front(NODE last)
 {
     NODE first;
@@ -61,6 +64,7 @@ NODE delete_front(NODE last)
     return last;
 }
 
+//Function to display the elements of CLL
 void display(NODE last)
 {
     if(last==NULL)
@@ -80,6 +84,7 @@ void display(NODE last)
     return;
 }
 
+//Function to count the number of nodes
 int count_node(NODE last)
 {
     int count=1;
@@ -94,6 +99,7 @@ int count_node(NODE last)
     return count;
 }
 
+//Function to sort the elements of CLL
 void sort(NODE last,int count)
 {
     int i,j;
