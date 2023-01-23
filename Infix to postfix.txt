@@ -22,7 +22,7 @@ char pop(char S[20],int *top)
 	return elem;
 }
 
-//Stack priority
+//Function of stack priority
 int F(char symbol)
 {
 	switch(symbol)
@@ -39,7 +39,7 @@ int F(char symbol)
 	}
 }
 
-//Input priority
+//Function of input priority
 int G(char symbol)
 {
 	switch(symbol)
