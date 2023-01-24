@@ -1,0 +1,64 @@
+//Program to implement binary search
+#include<stdio.h>
+
+//Function to accept the elements of the array
+void accept(int * n , int a[10])
+{
+	printf("Enter the number of elements in an array:");
+	scanf("%d",n);
+	printf("Enter the elements of the array:");
+	for(int i=0;i<*n;i++)
+		scanf("%d",&a[i]);
+}
+
+//Function to sort the elements
+void sort(int *n , int a[10])
+{
+	int i,j;
+	for(i=0;i<*n;i++)
+	{
+		for(j=0;j<*n-i-1;j++)
+		{
+			if(a[j]>a[j+1])
+			{
+				int temp;
+				temp = a[j];
+				a[j]=a[j+1];
+				a[j+1]=temp;
+			}
+		}
+	}
+}
+
+//Function to search for key element
+void bin_search(int n,int a[10])
+{
+	int key,L,R,mid;
+	printf("Enter the element to be searched:");
+	scanf("%d",&key);
+	L=0;
+	R=n-1;
+	while(L<=R)
+	{
+		mid=(L+R)/2;
+		if(a[mid]==key)
+		{
+			printf("Element is found at %d\n",mid+1);
+			return;
+		}
+		else if(a[mid]>key)
+			R=mid-1;
+		else
+			L=mid+1;
+	}
+	printf("The element is not found\n");
+}
+
+int main()
+{
+	int n,a[10];
+	accept(&n,a);
+	sort(&n,a);
+	bin_search(n,a);
+	return 0;
+}
