@@ -1,0 +1,50 @@
+//Progrsm to find the transpose of a matrix
+
+#include<stdio.h>
+
+//Function to accept the elements of the matrix 
+void accept(int a[10][10],int *m,int *n)
+{
+	printf("Enter the size of the matrix:\n");
+	scanf("%d%d",m,n);
+	printf("Enter the elements of the matrix:\n");
+	for(int i=0;i<*m;i++)
+	{
+		for(int j=0;j<*n;j++)
+			scanf("%d",&a[i][j]);
+	}
+}
+
+//Function to find the transpose of a matrix
+void transpose(int a[10][10],int t[10][10],int m,int n)
+{
+	int i,j;
+	for(i=0;i<m;i++)
+	{
+		for(j=0;j<n;j++)
+			t[j][i]=a[i][j];
+	}
+}
+
+//Function to display thr resultant matrix
+void display(int t[10][10],int m,int n)
+{
+	printf("Displaying the transpose:\n");
+	for(int i=0;i<n;i++)
+	{
+		for(int j=0;j<m;j++)
+			printf("%d\t",t[i][j]);
+		printf("\n");
+	}
+}
+
+int main()
+{
+	int a[10][10],t[10][10],m,n;
+	accept(a,&m,&n);
+	transpose(a,t,m,n);
+	display(t,m,n);
+	return 0;
+}
+	
+	
