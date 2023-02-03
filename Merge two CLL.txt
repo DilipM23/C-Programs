@@ -1,0 +1,223 @@
+//Program to implement circular linked list 
+
+#include<stdio.h>
+#include<stdlib.h>
+
+struct node
+{
+    int info;
+    struct node * link;
+};
+
+typedef struct node * NODE;
+
+NODE getnode()
+{
+    NODE x;
+    x=(NODE)malloc(sizeof(struct node));
+    if(x==NULL)
+    {
+        printf("Memory is not available\n");
+        exit(0);
+    }
+    return x;
+}
+
+NODE insert_front(NODE last,int elem)
+{
+    NODE temp;
+    temp=getnode();
+    temp->info=elem;
+    temp->link=NULL;
+    if(last==NULL)
+    {
+        last=temp;
+        last->link=temp;
+        return last;
+    }
+    temp->link=last->link;
+    last->link=temp;
+    return last;
+}
+
+NODE insert_rear(NODE last,int elem)
+{
+    NODE temp;
+    temp=getnode();
+    temp->info=elem;
+    temp->link=NULL;
+    if(last==NULL)
+        last=temp;
+    else
+        temp->link=last->link;
+    last->link=temp;
+    return temp;
+}
+
+NODE delete_front(NODE last)
+{
+    NODE first;
+    if(last==NULL)
+    {
+        printf("CLL is empty\n");
+        return NULL;
+    }
+    if(last->link==last)
+    {
+        printf("Deleted element is %d\n",last->info);
+        free(last);
+        return NULL;
+    }
+    first=last->link;
+    printf("Deleted element is %d\n",first->info);
+    last->link=first->link;
+    free(first);
+    return last;
+}
+
+NODE delete_rear(NODE last)
+{
+    NODE prev=NULL;
+    if(last==NULL)
+    {
+        printf("CLL is empty\n");
+        return NULL;
+    }
+    if(last->link==last)
+    {
+        printf("Deleted element is %d\n",last->info);
+        free(last);
+        return NULL;
+    }
+    prev=last->link;
+    while(prev->link!=last)
+        prev=prev->link;
+    prev->link=last->link;
+    printf("Deleted element is %d\n",last->info);
+    free(last);
+    return prev;
+}
+
+void display(NODE last)
+{
+    if(last==NULL)
+    {
+        printf("CLL is empty\n");
+        return;
+    }
+    NODE first=last->link;
+    printf("Displaying the elements of CLL\n");
+    while(first!=last)
+    {
+        printf("%d\t",first->info);
+        first=first->link;
+    }
+    printf("%d\t",first->info);
+    printf("\n");
+    return;
+}
+
+NODE merge(NODE first,NODE second)
+{
+    NODE temp,curr,pre;
+    temp=NULL;
+    curr=NULL;
+    pre=NULL;
+    if(first!=NULL)
+    {
+        curr=first->link;
+        do{
+            temp=getnode();
+            temp->info=curr->info;
+            if(pre==NULL)
+            {
+                pre=temp;
+                pre->link=temp;
+            }
+            else
+            {
+                temp->link=pre->link;
+                pre->link=temp;
+                pre= temp;
+            }
+            curr=curr->link;
+        }while(curr!=first->link);
+    }
+    if(second!=NULL)
+    {
+        curr=second->link;
+        do{
+            temp=getnode();
+            temp->info=curr->info;
+            if(pre==NULL)
+            {
+                pre=temp;
+                pre->link=temp;
+            }
+            else
+            {
+                temp->link=pre->link;
+                pre->link=temp;
+                pre=temp;
+            }
+            curr=curr->link;
+        }while(curr!=second->link);
+    }
+    return pre;
+}
+
+int main()
+{
+    int op,t=2,elem,c,fl=0,f2=0;
+    NODE last,first,second,res;
+    first=NULL;
+    second=NULL;
+    res=NULL;
+    while(1)
+    {
+        op=0;
+        printf("1:Insert front\n2:Display");
+        scanf("%d",&op);
+        switch(op)
+        {
+            case 1:
+            printf("Enter an element to be inserted\n");
+            scanf("%d",&elem);
+            first=insert_front(first,elem);
+            break;
+            case 2:
+            display(first);
+            break;
+            default :
+            fl=-1;
+            break;
+        }
+        if(fl==-1)
+        break;
+    }
+    while(1)
+    {
+        op=0;
+        printf("1:Insert front\n2:display\n");
+        scanf("%d",&op);
+        switch(op)
+        {
+            case 1:
+            printf("\nEnter an element to be inserted\n");
+            scanf("%d",&elem);
+            second=insert_front(second,elem);
+            break;
+            case 2:
+            display(second);
+            break;
+            default :
+            f2=-1;
+            break;
+        }
+        if(f2==-1)
+        break;
+    }
+    res=merge(first,second);
+    display(res);
+}
+    
