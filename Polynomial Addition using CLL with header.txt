@@ -1,0 +1,148 @@
+//Program to add two polynomials using CLL with header
+
+#include<stdio.h>
+#include<stdlib.h>
+
+//Declaring the structure polynomial
+struct poly
+{
+    int cf,px,py,pz;
+    struct poly* link;
+};
+
+typedef struct poly* P ;
+
+//Function to allocate the memory
+P getnode()
+{
+    P temp;
+    temp=(P) malloc(sizeof(struct poly));
+    if(temp==NULL)      //No space in the memory
+    {
+        printf("Memory is not available\n");
+        exit(0);
+    }
+    return temp;    //Memory is available
+}
+
+//Function to accept the polynomial
+void read_poly(P p1,int n)
+{
+    P temp;
+    int cf,px,py,pz,i;
+    for(int i=0;i<n;i++)
+    {
+        temp=getnode();     //Allocating memory
+        printf("Enter the coefficient,px,py,pz\n");
+        scanf("%d%d%d%d",&(temp->cf),&(temp->px),&(temp->py),&(temp->pz));
+        temp->link=p1->link;    //Inserting to the CLL with head
+        p1->link=temp;
+    }   
+}
+
+//Function to display the polynomial
+void display_poly(P p)     
+{
+    P cur=p->link;
+    if(p->link==p)     //No terms in the polynomial
+        printf("Polynomial not entered\n");
+    else{   //Polynomial is entered
+        while(cur!=p)
+        {
+            if(cur->cf >=0)     //Coefficient is greater than equal to 0
+                printf("+%dx^%dy^%dz^%d ",cur->cf,cur->px,cur->py,cur->pz);
+            else    //Coefficient is lesser then 0
+                printf("%dx^%dy^%dz^%d ",cur->cf,cur->px,cur->py,cur->pz);
+            cur=cur->link;
+        }
+    }
+    printf("\n");
+}
+
+//Comparing the term of first polynomial with the terms of second polynomial
+P compare(P term, P p)
+{
+    P cur=p->link;
+    while(cur!=p)
+    {
+        if(((term->px)==(cur->px)) && ((term->py)==(cur->py)) && ((term->pz)==(cur->pz))) //Found the matching term
+            return cur;
+        cur=cur->link;
+    }
+    return NULL;    //Matching term is not found
+}
+
+//Function to add two polynomials
+void add_poly(P p1,P p2,P res)
+{
+    P cur1=p1->link;
+    P temp,tempor;
+    while(cur1!=p1)
+    {
+        temp=compare(cur1,p2);
+        if(temp!=(NULL))    //Found the term with matching powers
+        {
+            tempor=getnode();
+            tempor->cf = cur1->cf + temp->cf;   //Adding the coefficients
+            tempor->px = cur1->px;
+            tempor->py = cur1->py;
+            tempor->pz = cur1->pz;
+            tempor->link=res->link;
+            res->link=tempor;
+            temp->cf=-999;
+        }
+        else    //Not found the term with matching powers
+        {
+            tempor=getnode();
+            tempor->cf=cur1->cf;
+            tempor->px=cur1->px;
+            tempor->py=cur1->py;
+            tempor->pz=cur1->pz;
+            tempor->link=res->link;
+            res->link=tempor;
+        }
+        cur1=cur1->link;
+    }
+    P cur2=p2->link;
+    while(cur2!=p2)     //Copying the terms left in the second polynomial
+    {
+        if((cur2->cf)!=(-999))
+        {
+            P new=getnode();
+            new->cf=cur2->cf;
+            new->px=cur2->px;
+            new->py=cur2->py;
+            new->pz=cur2->pz;
+            new->link=res->link;
+            res->link=new;
+        }
+        cur2=cur2->link;
+    }
+}
+
+int main()
+{
+    P p1;
+    int n1,n2;
+    p1 = getnode();     //Allocating memory for head of first polynomial
+    p1->link=p1; 
+    P p2;
+    p2 = getnode();     //Allocating memory for head of second polynomial
+    p2->link=p2;
+    printf("Enter the numbers of terms in first polynomial\n");     //Reading the no. of terms in 1st polnomial
+    scanf("%d",&n1);
+    read_poly(p1,n1);
+    printf("Enter the number of terms in second polynomial\n");     //Reading the no. of terms in 2nd polnomial
+    scanf("%d",&n2);
+    read_poly(p2,n2);
+    printf("\n\nFirst polynomial\n");
+    display_poly(p1);    //Displaying the first polynomial
+    printf("\n\nSecond Polynomial\n");
+    display_poly(p2);    //Displaying the second polynomial
+    P res = getnode();
+    add_poly(p1,p2,res);
+    printf("\n\nResultant Polynomial is :\n");
+    display_poly(res);      //Displaying the resultant polynomial
+    return 0;
+}
+
