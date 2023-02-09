@@ -1,0 +1,97 @@
+//Pogram to implement circular queue using realloc
+
+#include<stdio.h>
+#include<stdlib.h>
+
+int max_size=3;
+
+//Function to insert the elements to the circular queue
+int * insert(int *Q,int elem,int *rear,int *front,int *count)
+{
+	if((*count)==max_size)	//Queue is full
+	{
+		max_size=max_size*2;
+		int *P;
+		P=(int *)realloc(Q,sizeof(int)*max_size);	//Reallocating the memory
+		int i,j;
+		if((*front)!=0)	//Copying the elements to the new memory
+		{
+			for(i=(max_size/2)-1,j=max_size-1;(*count)>0;i--,j--)
+			{
+				P[j]=Q[i];
+				(*count)--;
+			}
+		}
+		(*front)=0;
+		(*rear)=(max_size/2)-1;
+		(*count)=max_size/2;
+		(*rear)=(*rear)+1%(max_size);
+		P[*rear]=elem;	//Inserting the element
+		(*count)++;
+		return P;
+	}
+	(*rear)=((*rear)+1)%max_size;
+	Q[*rear]=elem;	//Inserting the element
+	(*count)++;
+	return Q;
+}
+
+//Function to delete the elements of the queue
+void delete(int *Q,int *rear,int *front,int *count)
+{
+	if((*count)==0)	//No elements in the queue
+		printf("There are no elements to delete\n");
+	else	//Elements are present
+	{
+		printf("The deleted element is %d\n",Q[*front]);	//Displaying the deleted element 
+		(*front)=((*front)+1)%max_size;
+		(*count)--;
+	}
+}
+
+//Function to display the elements of the queue
+void display(int *Q,int count,int front)
+{
+	if(count==0){	//No elements in the queue
+		printf("There are no elements in the queue\n");
+		return;
+	}	
+	//Elements are present in the queue
+	printf("Displaing the elemets of the circular queue\n");
+	while(count>0)
+	{
+		printf("%d\t",Q[front]);
+		front=(front+1)%max_size;
+		count--;
+	}
+	printf("\n");
+}
+
+int main()
+{
+	int *Q,rear=max_size-1,front =0,count =0,ch,elem;
+	Q=(int *)malloc(sizeof(int)*max_size);	//Allocating the memory
+	while(1)
+	{
+		printf("Enter\n1-Insert\n2-Delete\n3-Display\n");	//Accepting the choice
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1 :
+					printf("Enter the element to be inserted\n");	//Accepting the element to be inserted
+					scanf("%d",&elem);
+					Q=insert(Q,elem,&rear,&front,&count);
+					break;
+			case 2 :
+					delete(Q,&rear,&front,&count);
+					break;
+			case 3 :
+					display(Q,count,front);
+					break;
+			default :
+					printf("Invalid Choice\n");
+					exit(0);
+		}
+	}
+	return 0;
+}
