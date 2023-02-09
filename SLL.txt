@@ -1,0 +1,148 @@
+//Program to implement singly linked list
+
+#include<stdio.h>
+#include<stdlib.h>
+
+//Declaration of structure
+struct node
+{
+	int info;
+	struct node * link;
+};
+
+typedef struct node * NODE;
+
+//Function to allocate memory
+NODE getnode()
+{
+	NODE temp;
+	temp=(NODE)malloc(sizeof(struct node));
+	if(temp==NULL)	//Memory not available
+	{
+		printf("Memory is not available\n");
+		exit(0);
+	}
+	return temp;	//Memory is available
+}
+
+//Function to insert the element at the front of SLL
+NODE insert_front(NODE first,int elem)
+{
+	NODE temp = getnode();	//allocating memory
+	temp->info=elem;	
+	temp->link=NULL;
+	if(first==NULL)		//Empty SLL
+		return temp;
+	temp->link=first;	//There are elements in SLL
+	return temp;
+}
+
+//Function to insert the element at the rear of the SLL
+NODE insert_rear(NODE first,int elem)
+{
+	NODE temp=getnode();	//Allocating memory
+	temp->info=elem;
+	temp->link=NULL;
+	if(first==NULL)	//Empty SLL
+		return temp;
+	NODE cur =first;
+	while(cur->link!=NULL)	//To find the last node
+		cur=cur->link;
+	cur->link=temp;	//Linking new node
+	return first;
+}
+
+//Function to delete the element at the front of the SLL
+NODE delete_front(NODE first)
+{
+	if(first==NULL)	//Empty SLL
+	{
+		printf("No elements in SLL\n");
+		return NULL;
+	}
+	NODE cur=first->link;
+	printf("The deleted element is %d\n",first->info);	//Displaying the deleted element
+	free(first);	//Deallocating the node of deleted element
+	return cur;
+}
+
+//Function to delete the element at the rear of the SLL
+NODE delete_rear(NODE first)
+{
+	if(first==NULL)	//Empty SLL
+	{
+		printf("No elements in SLL\n");
+		return NULL;
+	}
+	if(first->link==NULL)	//One element in SLL
+	{
+		printf("The deleted elementis %d\n",first->info);	//Displaying the deleted element
+		free(first);	//Deallocating the node of the deleted element
+		return NULL;
+	}
+	NODE cur=first,prev=NULL;
+	while(cur->link!=NULL)	//To find the last node
+	{
+		prev=cur;
+		cur=cur->link;
+	}
+	prev->link=NULL;	//Assigning Null to the link field of last but one node
+	printf("The deleted element is %d\n",cur->info);	//Displaying the deleted element
+	free(cur);	//Deallocating the node of the deleted element
+	return first;
+}
+
+//Function to display the elements of the SLL
+void display(NODE first)
+{
+	if(first==NULL){	//Empty SLL
+		printf("No elements in SLL\n");
+		return;
+	}
+	printf("Dispalying the elements of SLL\n");	//Elements are present in SLL
+	NODE cur=first;
+	while(cur!=NULL)	//Displaying the elements
+	{
+		printf("%d\t",cur->info);
+		cur=cur->link;
+	}
+	printf("\n");
+}
+
+int main()
+{
+	NODE first = NULL;
+	int ch,elem;
+	while(1)
+	{
+		printf("Enter\n1-Insert front\n2-Insert rear\n3-Delete front\n4-Delete rear\n5-Display\n");	//Accepting thw choice
+		scanf("%d",&ch);
+		switch(ch)
+		{
+			case 1 :
+					printf("Enter the element to be inserted\n");	//Accepting the element to be inserted
+					scanf("%d",&elem);
+					first=insert_front(first,elem);
+					break;
+			case 2 :
+					printf("Enter the element to be inserted\n");	//Accepting the element to be inserted
+					scanf("%d",&elem);
+					first=insert_rear(first,elem);
+					break;
+			case 3 :
+					first=delete_front(first);
+					break;
+			case 4 :
+					first=delete_rear(first);
+					break;
+			case 5 :
+					display(first);
+					break;
+			default : 
+					printf("Invalid choice\n");
+					exit(0);
+		}
+	}
+	return 0;
+}
+
