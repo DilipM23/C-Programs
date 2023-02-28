@@ -1,0 +1,158 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
+struct Employee{
+    int emp_id;
+    char emp_name[20];
+    int emp_sal;
+};
+
+struct node{
+    struct Employee info;
+    struct node *rlink, *llink;
+};
+
+typedef struct node * NODE;
+typedef struct Employee E;
+
+NODE getnode()
+{
+	NODE temp;
+	temp=(NODE)malloc(sizeof(struct node));
+	if(temp==NULL)	//Memory not available
+	{
+		printf("Memory is not available\n");
+		exit(0);
+	}
+	return temp;	//Memory is available
+}
+
+NODE insert(NODE first, E E1)
+{
+    NODE temp=getnode();
+    temp->info=E1;
+    temp->llink=NULL;
+    temp->rlink=NULL;
+    if(first==NULL)
+        return temp;
+    temp->rlink=first;
+    first->llink=temp;
+    return temp;
+}
+
+void display(NODE first)
+{
+    if(first==NULL){
+        printf("No elements in DLL");
+        return;
+    }
+    printf("\n\nDisplaying the elements of DLL:");
+    NODE cur=first;
+    while(cur!=NULL)
+    {
+        printf("\n\nName: %s",(cur->info).emp_name);
+        printf("\nID: %d",(cur->info).emp_id);
+        printf("\nSalary: %d",(cur->info).emp_sal);
+        cur=cur->rlink;
+    }
+    printf("\n\n");
+}
+
+void largest(NODE first)
+{
+    int large;
+    NODE cur=first;
+    large = (cur->info).emp_sal;
+    while(cur!=NULL)
+    {
+        if((cur->info).emp_sal > large)
+            large = (cur->info).emp_sal;
+        cur=cur->rlink;
+    }
+    cur = first;
+    while(cur!=NULL)
+    {
+        if((cur->info).emp_sal == large)
+        {
+            printf("\n\nName: %s",(cur->info).emp_name);
+            printf("\nID: %d",(cur->info).emp_id);
+            printf("\nSalary: %d",(cur->info).emp_sal);
+        }
+        cur=cur->rlink;
+    }
+    printf("\n");
+}
+
+void printnames(NODE first)
+{
+    NODE cur=first;
+    while(cur!=NULL)
+    {
+        if((cur->info).emp_name[0]=='A')
+        {
+            printf("\n\nName: %s",(cur->info).emp_name);
+            printf("\nID: %d",(cur->info).emp_id);
+            printf("\nSalary: %d",(cur->info).emp_sal);
+        }
+        cur=cur->rlink;
+    }
+    printf("\n");
+}
+
+void update(NODE first)
+{
+    int key;
+    char name[20];
+    printf("Enter the employee id whose name has to be updated\n");
+    scanf("%d",&key);
+    NODE cur = first;
+    while(cur!=NULL)
+    {
+        if((cur->info).emp_id==key)
+        {
+            printf("Enter the updated name:\n");
+            scanf("%s",name);
+            strcpy((cur->info).emp_name,name);
+        }
+        cur=cur->rlink;
+    }
+}
+int main()
+{
+    E e;
+    int ch;
+    NODE first = NULL;
+    while(1)
+    {
+        printf("Enter\n1-Insert\n2-Display\n3-Largest\n4-Print names\n5-Update name\n6-Exit\n");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1 :
+                    printf("Enter the name of the employee:");
+                    scanf("%s",e.emp_name);
+                    printf("Enter the employee id:");
+                    scanf("%d",&(e.emp_id));
+                    printf("Enter the employee salary:");
+                    scanf("%d",&(e.emp_sal));
+                    first=insert(first,e);
+                    break;
+            case 2 :
+                    display(first);
+                    break;
+            case 3 :
+                    largest(first);
+                    break;
+            case 4 :
+                    printnames(first);
+                    break;
+            case 5 :
+                    update(first);
+                    break;
+            case 6 :
+                    exit(0);
+        }
+    }
+    return 0;
+}
