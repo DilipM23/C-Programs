@@ -1,0 +1,148 @@
+
+
+#include<stdio.h>
+#include<stdlib.h>
+
+//Declaring the structure polynomial
+struct node
+{
+    int info;
+    struct node *llink,*rlink;
+};
+
+typedef struct node * NODE ;
+
+//Function to allocate the memory
+NODE getnode()
+{
+    NODE temp;
+    temp=(NODE)malloc(sizeof(struct node));
+    if(temp==NULL)      //No space in the memory
+    {
+        printf("Memory is not available\n");
+        exit(0);
+    }
+    return temp;    //Memory is available
+}
+
+NODE insert_front(NODE first,int elem)
+{
+    NODE temp=getnode();
+    temp->info=elem;
+    temp->llink=NULL;
+    temp->rlink=NULL;
+    if(first==NULL)
+        return temp;
+    first->llink=temp;
+    temp->rlink=first;
+    return temp;
+}
+
+NODE insert_rear(NODE first ,int elem)
+{
+    NODE temp=getnode();
+    temp->info = elem;
+    temp->rlink=NULL;
+    temp->llink=NULL;
+    if(first==NULL)
+        return temp;
+    NODE cur=first;
+    while(cur->rlink!=NULL)
+        cur=cur->rlink;
+    cur->rlink=temp;
+    temp->llink=cur;
+    return first;
+}
+
+NODE delete_front(NODE first)
+{
+    if(first==NULL)
+    {
+        printf("There are no elements in DLL\n");
+        return NULL;
+    }
+    if(first->rlink==NULL)
+    {
+        printf("Deleted element is %d\n",first->info);
+        free(first);
+        return NULL;
+    }
+    NODE cur=first->rlink;
+    cur->llink=NULL;
+    printf("The deleted element is %d\n",first->info);
+    free(first);
+    return cur;
+}
+
+NODE delete_rear(NODE first)
+{
+    if(first==NULL)
+    {
+        printf("There are no elements in DLL\n");
+        return NULL;
+    }
+    NODE cur,prev;
+    cur=first;
+    prev=NULL;
+    while(cur->rlink!=NULL)
+    {
+        prev=cur;
+        cur=cur->rlink;
+    }
+    printf("The deleted element is %d\n",cur->info);
+    free(cur);
+    if(prev==NULL)
+        return NULL;
+    prev->rlink=NULL;
+    return first;
+}
+void display(NODE first)
+{
+    if(first==NULL)
+    {
+        printf("NO elements in DLL\n");
+        return;
+    }
+    NODE cur=first;
+    printf("Displaying the elements of DLL\n");
+    while(cur!=NULL)
+    {
+        printf("%d\t",cur->info);
+        cur=cur->rlink;
+    }
+    printf("\n");
+}
+
+int main()
+{
+    NODE first = NULL;
+    int elem,ch;
+    while(1)
+    {
+        printf("Enter\n1-Insert front\n2-Insert rear\n3-Delete front\n4-Delete rear\n5-Display\n");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1 :
+                    printf("Enter the element to be inserted\n");
+                    scanf("%d",&elem);
+                    first=insert_front(first,elem);
+                    break;
+            case 2 :
+                    printf("Enter the element to be inserted\n");
+                    scanf("%d",&elem);
+                    first=insert_rear(first,elem);
+                    break;
+            case 3 :
+                    first=delete_front(first);
+                    break;
+            case 4 :
+                    first=delete_rear(first);
+                    break;
+            case 5 :
+                    display(first);
+                    break;
+        }
+    }
+    return 0;
+}
