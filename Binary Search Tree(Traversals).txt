@@ -1,0 +1,114 @@
+//Program to implement Binary Search Tree
+
+#include<stdio.h>
+#include<stdlib.h>
+
+//Declaring the structure
+struct node {
+    struct node *llink, *rlink;
+    int info;
+};
+
+typedef struct node * NODE;
+
+//Function to allocate memory
+NODE getnode()
+{
+    NODE temp;
+    temp = (NODE) malloc (sizeof(struct node));
+    if(temp == NULL)
+    {
+        printf("Memory is not availabe");
+        exit(0);
+    }
+    return temp;
+}
+
+//Function to insert the elements to binary search tree
+NODE insert_BST(NODE root, int info)
+{
+    NODE temp = getnode();
+    temp->llink = NULL;
+    temp->rlink = NULL;
+    temp->info = info;
+    if(root == NULL)
+        return temp;
+    NODE cur = root,prev = NULL;
+    while(cur != NULL)
+    {
+        prev = cur;
+        if(info < (root->info))
+            cur = cur->llink;
+        else    
+            cur = cur->rlink;
+    }
+    if(info < (prev->info))
+        prev->llink = temp;
+    else    
+        prev->rlink = temp;
+    return root;
+}
+
+//Function for preorder traversal
+void preorder(NODE root)
+{
+    if(root == NULL )
+        return;
+    printf("%d\t",root->info);
+    preorder(root->llink);
+    preorder(root->rlink);
+}
+
+//Function for postorder traversal
+void postorder(NODE root)
+{
+    if(root == NULL)
+        return;
+    postorder(root->llink);
+    postorder(root->rlink);
+    printf("%d\t",root->info);
+}
+
+//Function for inorder traversal
+void inorder(NODE root)
+{
+    if(root==NULL)
+        return;
+    inorder(root->llink);
+    printf("%d\t",root->info);
+    inorder(root->rlink);
+}
+
+int main()
+{
+    int n,ch;
+    NODE root = NULL;
+
+    while(1)
+    {
+        printf("Enter 1.Insert the elements 2.Preorder 3.Postorder 4.Inorder\n");
+        scanf("%d",&ch);
+        switch(ch)
+        {
+            case 1 : 
+                    printf("Enter the element to be inserted\n");
+                    int elem;
+                    scanf("%d",&elem);
+                    root = insert_BST(root, elem);
+                    break;
+            case 2 :
+                    preorder(root);
+                    printf("\n");
+                    break;
+            case 3 :
+                    postorder(root);
+                    printf("\n");
+                    break;
+            case 4 :
+                    inorder(root);
+                    printf("\n");
+                    break;
+            default : break;
+        }
+    }
+}
